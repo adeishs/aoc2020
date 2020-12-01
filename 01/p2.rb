@@ -1,12 +1,7 @@
 #!/usr/bin/env ruby
 
-nums = STDIN.each_line.map do |line|
-  line.to_i
-end
-
-nums.combination(3) do |c|
-  if c.sum == 2020
-    puts c.reduce(&:*)
-    exit
-  end
-end
+puts STDIN.each_line.map { |line| line.to_i }.
+  combination(3).
+  select { |n| n.sum == 2020 }.
+  first.
+  reduce(1, :*)
