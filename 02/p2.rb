@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-def valid(line)
-  (min, max, val_ch, password) = line.split(/[- :]+/)
-  return (password[min.to_i - 1] == val_ch) ^ (password[max.to_i - 1] == val_ch)
-end
-
-puts STDIN.each_line.select { |line| valid(line) }.count
+puts STDIN.each_line.select {
+  |line| ->(line) {
+    (min, max, val_ch, password) = line.split(/[- :]+/)
+    (password[min.to_i - 1] == val_ch) ^ (password[max.to_i - 1] == val_ch)
+  }[line]
+}.count
