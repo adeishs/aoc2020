@@ -1,13 +1,14 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 nums = {}
-STDIN.each_line do |line|
+$stdin.each_line do |line|
   num = line.to_i
   nums[num] = 1
 
   pair = 2020 - num
-  if nums[pair] != nil
-    puts (num * pair)
+  unless nums[pair].nil?
+    puts(num * pair)
     break
   end
 end
