@@ -1,13 +1,14 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-def inc_x(n)
-  x = -n
-  -> { x = (x + n) % 31 }
+def inc_x(x_ofs)
+  x = -x_ofs
+  -> { x = (x + x_ofs) % 31 }
 end
 
 x = inc_x(3)
-puts STDIN.each_line.
-  map { |line| line.chomp }.
-  map { |row| row.split('')[x[]] == '#' }.
-  select { |tree| tree }.
-  count
+puts $stdin.each_line
+           .map(&:chomp)
+           .map { |row| row.split('')[x[]] == '#' }
+           .select { |tree| tree }
+           .count

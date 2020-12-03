@@ -1,29 +1,30 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-trees = STDIN.each_line.map { |line| line.chomp }
-m = (1..7).step(2).map {
-  |n| ->(n) {
-    inc_x = -> {
-      x = -n
-      -> { x = (x + n) % 31 }
+trees = $stdin.each_line.map(&:chomp)
+m = (1..7).step(2).map do |n|
+  lambda { |x_ofs|
+    inc_x = lambda {
+      x = -x_ofs
+      -> { x = (x + x_ofs) % 31 }
     }
     x = inc_x[]
-    trees.map { |row| row.split('')[x[]] == '#' }.
-      select { |tree| tree }.
-      count
+    trees.map { |row| row.split('')[x[]] == '#' }
+         .select { |tree| tree }
+         .count
   }[n]
-}.reduce(1, :*)
+end.reduce(1, :*)
 
 trees = (0...trees.count).select(&:even?).map { |i| trees[i] }
 
-n = 1
-inc_x = -> {
-  x = -n
-  -> { x = (x + n) % 31 }
+x_ofs = 1
+inc_x = lambda {
+  x = -x_ofs
+  -> { x = (x + x_ofs) % 31 }
 }
 x = inc_x[]
-m *= trees.map { |row| row.split('')[x[]] == '#' }.
-  select { |tree| tree }.
-  count
+m *= trees.map { |row| row.split('')[x[]] == '#' }
+          .select { |tree| tree }
+          .count
 
 puts m
