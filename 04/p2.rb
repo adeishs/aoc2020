@@ -19,16 +19,15 @@ passports.map do |passport|
   (0...els.count).step(2).map { |i| h[els[i]] = els[i + 1] }
   h.delete('cid')
 
-  next if h.keys.count != 7
-
-  next unless h['byr'].to_i.between?(1920, 2002) &&
+  next unless h.keys.count == 7 &&
+              h['byr'].to_i.between?(1920, 2002) &&
               h['iyr'].to_i.between?(2010, 2020) &&
               h['eyr'].to_i.between?(2020, 2030) &&
               ((!h['hgt'].rindex('cm').nil? &&
                 h['hgt'].sub('cm', '').to_i.between?(150, 193)) ||
                (!h['hgt'].rindex('in').nil? &&
                 h['hgt'].sub('in', '').to_i.between?(59, 76))) &&
-              h['hcl'][1, 6].match(/^[\da-f]{6}$/) &&
+              h['hcl'].match(/^#[\da-f]{6}$/) &&
               %w[amb blu brn gry grn hzl oth].any? { |c| c == h['ecl'] } &&
               h['pid'].match(/^\d{9}$/)
 
