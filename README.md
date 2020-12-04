@@ -1,2 +1,2 @@
 # aoc2020
-Having fun with Advent of Code 2020 with Ruby.
+Having fun with Advent of Code 2020 with Ruby and Crystal.
