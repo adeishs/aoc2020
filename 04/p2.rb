@@ -2,9 +2,7 @@
 # frozen_string_literal: true
 
 def valid_passport(passport)
-  els = passport.split(/[ :]/)
-  h = {}
-  (0...els.count).step(2).map { |i| h[els[i]] = els[i + 1] }
+  h = Hash[*passport.split(/[ :]/)]
 
   h.keys.count == 7 &&
   h['byr'].to_i.between?(1920, 2002) &&
