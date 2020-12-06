@@ -7,7 +7,6 @@ def bin_to_dec(str, set_char)
 end
 
 puts $stdin.each_line
-           .map(&:chomp)
            .map { |pass|
              bin_to_dec(pass[0, 7], 'B') * 8 + bin_to_dec(pass[7, 3], 'R')
            }
