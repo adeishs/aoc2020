@@ -3,8 +3,10 @@
 
 puts $stdin.read
            .split("\n\n")
-           .map { |line| Hash[*line.gsub("\n", ' ')
-                                   .gsub(/cid:\d+ ?/, '')
-                                   .split(/[ :]/)].keys.count == 7 }
-           .select { |valid| valid }
+           .select { |line|
+             Hash[*line.gsub("\n", ' ')
+                       .gsub(/cid:\d+ ?/, '')
+                       .split(/[ :]/)]
+               .keys.count == 7
+           }
            .count
