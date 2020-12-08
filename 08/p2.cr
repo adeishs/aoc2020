@@ -8,10 +8,7 @@ ins = STDIN.each_line
   next if ins[fix_line_num][0] == "acc"
 
   fixed_ins = ins.clone
-  fixed_ins[fix_line_num] = [
-    ins[fix_line_num][0] == "jmp" ? "nop" : "jmp",
-    ins[fix_line_num][1],
-  ]
+  fixed_ins[fix_line_num][0] = ins[fix_line_num][0] == "jmp" ? "nop" : "jmp"
 
   executed = {} of Int32 => Bool
   line_num = 0
