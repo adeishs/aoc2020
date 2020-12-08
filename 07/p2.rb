@@ -18,14 +18,12 @@ specs.map do |s|
   }.call(s)
 end
 
-inside = ->(clr) {
+inside = lambda { |clr|
   return 1 if clr_cnt[clr].nil?
 
   sum = 1
   clr_cnt[clr].each_key do |o|
-    unless clr_cnt[clr][o].nil?
-      sum += clr_cnt[clr][o] * inside.call(o)
-    end
+    sum += clr_cnt[clr][o] * inside.call(o) unless clr_cnt[clr][o].nil?
   end
 
   sum
