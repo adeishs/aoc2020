@@ -1,7 +1,21 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-target = 'shiny gold'
+def get_inside_bag_count(clr_cnt, clr)
+  return 1 if clr_cnt[clr].nil?
+
+  sum = 1
+  clr_cnt[clr].each_key do |inside_clr|
+    unless clr_cnt[clr][inside_clr].nil?
+      sum += clr_cnt[clr][inside_clr] *
+             get_inside_bag_count(clr_cnt, inside_clr)
+    end
+  end
+
+  sum
+end
+
+outer_clr = 'shiny gold'
 specs = $stdin.each_line
               .reject { |line| line.include?('no other ') }
               .map { |line| line.chomp.gsub(/ bags?/, '').gsub(/\.$/, '') }
@@ -18,15 +32,4 @@ specs.map do |s|
   }.call(s)
 end
 
-inside = lambda { |clr|
-  return 1 if clr_cnt[clr].nil?
-
-  sum = 1
-  clr_cnt[clr].each_key do |o|
-    sum += clr_cnt[clr][o] * inside.call(o) unless clr_cnt[clr][o].nil?
-  end
-
-  sum
-}
-
-puts inside.call(target) - 1
+puts get_inside_bag_count(clr_cnt, outer_clr) - 1
