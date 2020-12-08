@@ -2,20 +2,17 @@
 # frozen_string_literal: true
 
 target = 'shiny gold'
+rejected = lambda { |spec|
+  spec.start_with?(target) || spec.include?('no other ')
+}
 specs = $stdin.each_line
-              .reject do |line|
-                line.start_with?(target) || line.include?('no other ')
-              end
+              .reject { |line| rejected.call(line) }
               .map { |line| line.chomp.gsub(/ bags?/, '').gsub(/\.$/, '') }
 
 contained_by = {}
-specs.map do |s|
-  lambda { |spec|
-    (containing, contained) = spec.split(' contain ')
-    contained_by[containing] = contained.split(', ').map do |c|
-      c.split(' ', 2)[1]
-    end
-  }.call(s)
+specs.map do |spec|
+  (container, containee) = spec.split(' contain ')
+  contained_by[container] = containee.split(', ').map { |c| c.split(' ', 2)[1] }
 end
 
 contained_by.each_key do |k|
