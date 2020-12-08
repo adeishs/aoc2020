@@ -1,12 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-ins = []
-$stdin.each_line.map do |line|
-  (op, arg_s) = line.chomp.split
-  arg = arg_s.to_i
-  ins.append([op, arg])
-end
+ins = $stdin.each_line
+            .map { |line| line.chomp.split }
+            .map { |op, arg_s| [op, arg_s.to_i] }
 
 executed = {}
 line_num = 0
