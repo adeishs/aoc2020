@@ -20,8 +20,6 @@ loop do
   nums.shift
 end
 
-puts invalid_num
-
 (2...raw_nums.size).each do |set_size|
   (0...raw_nums.size - set_size).each do |start|
     chunk_nums = raw_nums[start, set_size]
