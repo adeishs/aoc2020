@@ -8,7 +8,6 @@ CHUNK_SIZE = 25
 loop do
   new_num = nums[CHUNK_SIZE]
 
-  new_num_found = false
   if nums[0, CHUNK_SIZE].combination(2)
                         .select { |p| p.sum == new_num }
                         .empty?
