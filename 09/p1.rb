@@ -1,33 +1,20 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 nums = $stdin.each_line
              .map { |line| line.chomp.to_i }
 
-num_of_nums = nums.size
-chunk_size = 25
-(0...nums.size - chunk_size).each do |i|
-  chunk_nums = nums[0, chunk_size]
-  new_num = nums[chunk_size]
+CHUNK_SIZE = 25
+loop do
+  new_num = nums[CHUNK_SIZE]
 
   new_num_found = false
-  ofs = 0
-  (0...chunk_size - 1).each do |j|
-    (j + 1...chunk_size).each do |k|
-      if chunk_nums[j] + chunk_nums[k] == new_num
-        new_num_found = true
-        ofs = j
-        break
-      end
-    end
-
-    break if new_num_found
-  end
-
-  unless new_num_found
+  if nums[0, CHUNK_SIZE].combination(2)
+                        .select { |p| p.sum == new_num }
+                        .empty?
     puts new_num
     break
   end
 
   nums.shift
-  num_of_nums -= 1
 end
