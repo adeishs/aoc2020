@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 joltages = $stdin.each_line
-  .map { |line| line.chomp.to_i }
-  .sort
+                 .map { |line| line.chomp.to_i }
+                 .sort
 
 diff_freq = Hash.new(0)
 diff_freq[joltages[0]] = 1

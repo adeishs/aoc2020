@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 joltages = $stdin.each_line
-  .map { |line| line.chomp.to_i }
-  .sort
+                 .map { |line| line.chomp.to_i }
+                 .sort
 
 joltages.unshift(0)
 joltages.append(joltages.last + 3)
@@ -15,4 +16,4 @@ alts[0] = 1
   end
 end
 
-puts alts.max
+puts alts.values.max
