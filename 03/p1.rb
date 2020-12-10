@@ -9,6 +9,5 @@ end
 x = inc_x(3)
 puts $stdin.each_line
            .map(&:chomp)
-           .map { |row| row.split('')[x[]] == '#' }
-           .select { |tree| tree }
+           .select { |row| row.split('')[x[]] == '#' }
            .count
