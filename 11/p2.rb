@@ -27,12 +27,10 @@ loop do
               col = j + dist * x
 
               break if !row.between?(0, seat_rows.size - 1) ||
-                !col.between?(0, seat_rows[0].size - 1)
+                       !col.between?(0, seat_rows[0].size - 1)
               next if prev[row][col] == FLOOR
 
-              if prev[row][col] == OCCUPIED
-                occupied_seen = true
-              end
+              occupied_seen = prev[row][col] == OCCUPIED
               break
             end
             break if occupied_seen
@@ -52,12 +50,10 @@ loop do
               col = j + dist * x
 
               break if !row.between?(0, seat_rows.size - 1) ||
-                !col.between?(0, seat_rows[0].size - 1)
+                       !col.between?(0, seat_rows[0].size - 1)
               next if prev[row][col] == FLOOR
 
-              if prev[row][col] == OCCUPIED
-                num_of_occupied_seats += 1
-              end
+              num_of_occupied_seats += 1 if prev[row][col] == OCCUPIED
               break
             end
           end
@@ -71,6 +67,7 @@ loop do
   end
 
   break if prev == curr
+
   prev = curr.clone
   curr = []
 end
