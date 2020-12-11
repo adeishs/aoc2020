@@ -4,6 +4,7 @@
 EMPTY = 'L'
 OCCUPIED = '#'
 FLOOR = '.'
+DIRS = [-1, 0, 1]
 
 seat_rows = $stdin.each_line.map(&:chomp).to_a
 
@@ -18,44 +19,34 @@ loop do
       case prev[i][j]
       when EMPTY
         occupied_seen = false
-        (-1..1).each do |y|
-          (-1..1).each do |x|
-            next if x.zero? && y.zero?
+        DIRS.product(DIRS).reject { |y, x| x.zero? && y.zero? }.each do |y, x|
+          (1..length).each do |dist|
+            row = i + dist * y
+            col = j + dist * x
 
-            (1..length).each do |dist|
-              row = i + dist * y
-              col = j + dist * x
+            break if !row.between?(0, seat_rows.size - 1) ||
+                     !col.between?(0, seat_rows[0].size - 1)
+            next if prev[row][col] == FLOOR
 
-              break if !row.between?(0, seat_rows.size - 1) ||
-                       !col.between?(0, seat_rows[0].size - 1)
-              next if prev[row][col] == FLOOR
-
-              occupied_seen = prev[row][col] == OCCUPIED
-              break
-            end
-            break if occupied_seen
+            occupied_seen = prev[row][col] == OCCUPIED
+            break
           end
-
           break if occupied_seen
         end
         curr[i][j] = occupied_seen ? EMPTY : OCCUPIED
       when OCCUPIED
         num_of_occupied_seats = 0
-        (-1..1).each do |y|
-          (-1..1).each do |x|
-            next if x.zero? && y.zero?
+        DIRS.product(DIRS).reject { |y, x| x.zero? && y.zero? }.each do |y, x|
+          (1..length).each do |dist|
+            row = i + dist * y
+            col = j + dist * x
 
-            (1..length).each do |dist|
-              row = i + dist * y
-              col = j + dist * x
+            break if !row.between?(0, seat_rows.size - 1) ||
+                     !col.between?(0, seat_rows[0].size - 1)
+            next if prev[row][col] == FLOOR
 
-              break if !row.between?(0, seat_rows.size - 1) ||
-                       !col.between?(0, seat_rows[0].size - 1)
-              next if prev[row][col] == FLOOR
-
-              num_of_occupied_seats += 1 if prev[row][col] == OCCUPIED
-              break
-            end
+            num_of_occupied_seats += 1 if prev[row][col] == OCCUPIED
+            break
           end
         end
 
