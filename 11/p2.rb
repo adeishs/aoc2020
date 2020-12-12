@@ -8,11 +8,12 @@ DS = [-1, 0, 1].freeze
 DIRS = DS.product(DS).reject { |y, x| x.zero? && y.zero? }
 
 def outside_boundary?(row, col, seats)
-  !row.between?(0, seats.size - 1) ||
-    !col.between?(0, seats[0].size - 1)
+  !row.between?(0, seats.size - 1) || !col.between?(0, seats[0].size - 1)
 end
 
-def check_seats(seats, length, i, j)
+def get_new_state(seats, length, i, j)
+  return FLOOR if seats[i][j] == FLOOR
+
   num_of_occupied_seats = 0
   DIRS.each do |y, x|
     (1..length).each do |dist|
@@ -25,36 +26,31 @@ def check_seats(seats, length, i, j)
       num_of_occupied_seats += 1 if seats[row][col] == OCCUPIED
       break
     end
-    break if num_of_occupied_seats.positive? && seats[i][j] == EMPTY
+    return EMPTY if (num_of_occupied_seats.positive? && seats[i][j] == EMPTY) ||
+                    (num_of_occupied_seats >= 5 && seats[i][j] == OCCUPIED)
   end
 
-  num_of_occupied_seats
+  OCCUPIED
 end
 
-prev = $stdin.each_line
-                  .map { |line| line.chomp.split('') }
+def arrange_seats(seats)
+  length = [seats.size, seats[0].size].max
+  prev = seats
+  curr = []
 
-length = [prev.size, prev[0].size].max
-curr = []
-
-loop do
-  curr = (0...prev.size).map do |i|
-    (0...prev[i].size).map do |j|
-      if prev[i][j] == EMPTY
-        check_seats(prev, length, i, j).positive? ? EMPTY : OCCUPIED
-      elsif prev[i][j] == OCCUPIED && check_seats(prev, length, i, j) >= 5
-        EMPTY
-      else
-        prev[i][j]
-      end
+  loop do
+    curr = (0...prev.size).map do |i|
+      (0...prev[i].size).map { |j| get_new_state(prev, length, i, j) }
     end
+
+    return curr if prev == curr
+
+    prev = curr.clone
   end
-
-  break if prev == curr
-
-  prev = curr.clone
 end
 
-puts curr.flatten
-         .select { |c| c == OCCUPIED }
-         .size
+puts arrange_seats($stdin.each_line
+                         .map { |line| line.chomp.split('') })
+  .flatten
+  .select { |c| c == OCCUPIED }
+  .size
