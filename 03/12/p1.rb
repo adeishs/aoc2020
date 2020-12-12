@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 movements = $stdin.each_line.map(&:chomp)
 
-pos = 0+0i
-d = 1+0i
+pos = 0 + 0i
+d = 1 + 0i
 
 movements.each do |line|
   action = line[0]
@@ -11,11 +12,13 @@ movements.each do |line|
 
   case action
   when 'L'
-    (0...val).step(90) do loop
+    (0...val).step(90) do
+      loop
       d = Complex(-d.imag, d.real)
     end
   when 'R'
-    (0...val).step(90) do loop
+    (0...val).step(90) do
+      loop
       d = Complex(d.imag, -d.real)
     end
   when 'N'
