@@ -12,15 +12,13 @@ ROTATOR = {
   'R' => 1 - 1i
 }.freeze
 
-movements = $stdin.each_line.map(&:chomp)
-
 pos = 0 + 0i
 d = 10 + 1i
 
-movements.each do |line|
-  action = line[0]
-  val = line[(1...line.length)].to_i
-
+$stdin.each_line
+      .map { |line| line.chomp.split('', 2) }
+      .map { |action, val_s| [action, val_s.to_i] }
+      .each do |action, val|
   case action
   when 'L', 'R'
     (0...val).step(90) do
