@@ -6,11 +6,11 @@ POS_D = {
   'S' => 0 - 1i,
   'E' => 1 + 0i,
   'W' => -1 + 0i
-}
+}.freeze
 ROTATOR = {
   'L' => -1 + 1i,
-  'R' => 1 - 1i,
-}
+  'R' => 1 - 1i
+}.freeze
 
 movements = $stdin.each_line.map(&:chomp)
 

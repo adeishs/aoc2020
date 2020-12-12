@@ -6,11 +6,11 @@ POS_D = {
   'S' => 0 - 1i,
   'E' => 1 + 0i,
   'W' => -1 + 0i
-}
+}.freeze
 ROTATOR = {
   'L' => -1 + 1i,
-  'R' => 1 - 1i,
-}
+  'R' => 1 - 1i
+}.freeze
 
 movements = $stdin.each_line.map(&:chomp)
 
@@ -21,16 +21,13 @@ movements.each do |line|
   action = line[0]
   val = line[(1...line.length)].to_i
 
-  case action
-  when 'L', 'R'
+  if %w[L R].any? { |a| a == action }
     (0...val).step(90) do
       loop
       d = Complex(d.imag * ROTATOR[action].real, d.real * ROTATOR[action].imag)
     end
-  when 'F'
-    pos += d * val
   else
-    pos += POS_D[action] * val
+    pos += (action == 'F' ? d : POS_D[action]) * val
   end
 end
 
