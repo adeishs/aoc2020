@@ -7,9 +7,9 @@ FLOOR = '.'
 DS = [-1, 0, 1].freeze
 DIRS = DS.product(DS).reject { |y, x| x.zero? && y.zero? }
 
-def outside_boundary?(row, col, seat_rows)
-  !row.between?(0, seat_rows.size - 1) ||
-    !col.between?(0, seat_rows[0].size - 1)
+def outside_boundary?(row, col, seats)
+  !row.between?(0, seats.size - 1) ||
+    !col.between?(0, seats[0].size - 1)
 end
 
 def check_seats(seats, length, i, j)
@@ -31,32 +31,30 @@ def check_seats(seats, length, i, j)
   num_of_occupied_seats
 end
 
-seat_rows = $stdin.each_line.map(&:chomp).to_a
+prev = $stdin.each_line
+                  .map { |line| line.chomp.split('') }
 
-prev = seat_rows.clone
-length = [seat_rows.size, seat_rows[0].size].max
+length = [prev.size, prev[0].size].max
 curr = []
 
 loop do
-  (0...seat_rows.size).each do |i|
-    curr[i] = FLOOR * seat_rows[i].size
-    (0...prev[i].size).each do |j|
-      curr[i][j] =
-        if prev[i][j] == EMPTY
-          check_seats(prev, length, i, j).positive? ? EMPTY : OCCUPIED
-        elsif prev[i][j] == OCCUPIED && check_seats(prev, length, i, j) >= 5
-          EMPTY
-        else
-          prev[i][j]
-        end
+  curr = (0...prev.size).map do |i|
+    (0...prev[i].size).map do |j|
+      if prev[i][j] == EMPTY
+        check_seats(prev, length, i, j).positive? ? EMPTY : OCCUPIED
+      elsif prev[i][j] == OCCUPIED && check_seats(prev, length, i, j) >= 5
+        EMPTY
+      else
+        prev[i][j]
+      end
     end
   end
 
   break if prev == curr
 
   prev = curr.clone
-  curr = []
 end
 
-puts curr.map { |row| row.split('').select { |c| c == OCCUPIED }.size }
-         .sum
+puts curr.flatten
+         .select { |c| c == OCCUPIED }
+         .size
