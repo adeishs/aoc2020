@@ -22,16 +22,13 @@ movements.each do |line|
   action = line[0]
   val = line[(1...line.size)].to_i
 
-  case action
-  when 'L', 'R'
+  if ['L', 'R'].any? { |a| a == action }
     (0...val).step(90) do |_|
       d = Complex.new(d.imag * ROTATOR[action].real,
         d.real * ROTATOR[action].imag)
     end
-  when 'F'
-    pos += d * val
   else
-    pos += POS_D[action] * val
+    pos += (action == 'F' ? d : POS_D[action]) * val
   end
 end
 
