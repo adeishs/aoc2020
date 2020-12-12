@@ -1,36 +1,36 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+POS_D = {
+  'N' => 0 + 1i,
+  'S' => 0 - 1i,
+  'E' => 1 + 0i,
+  'W' => -1 + 0i
+}
+ROTATOR = {
+  'L' => -1 + 1i,
+  'R' => 1 - 1i,
+}
+
 movements = $stdin.each_line.map(&:chomp)
 
 pos = 0 + 0i
-d = 1 + 0i
+d = POS_D['E']
 
 movements.each do |line|
   action = line[0]
   val = line[(1...line.length)].to_i
 
   case action
-  when 'L'
+  when 'L', 'R'
     (0...val).step(90) do
       loop
-      d = Complex(-d.imag, d.real)
+      d = Complex(d.imag * ROTATOR[action].real, d.real * ROTATOR[action].imag)
     end
-  when 'R'
-    (0...val).step(90) do
-      loop
-      d = Complex(d.imag, -d.real)
-    end
-  when 'N'
-    pos += Complex(0, val)
-  when 'S'
-    pos -= Complex(0, val)
-  when 'E'
-    pos += val
-  when 'W'
-    pos -= val
   when 'F'
     pos += d * val
+  else
+    pos += POS_D[action] * val
   end
 end
 
