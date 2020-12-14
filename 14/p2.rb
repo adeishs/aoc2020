@@ -1,53 +1,56 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-BIN_DIGITS = ["0", "1"]
+BIN_DIGITS = %w[0 1].freeze
+
+def mask_loc(loc, mask)
+  x_bits = []
+  (0...mask.split('').size).each do |b|
+    case mask[b]
+    when 'X'
+      x_bits << b
+    when '1'
+      loc[b] = mask[b]
+    end
+  end
+
+  [loc, x_bits]
+end
+
+def get_floats(x_bit_count)
+  return nil if x_bit_count.zero?
+
+  xs = BIN_DIGITS
+  (x_bit_count - 1).times { xs = xs.product(BIN_DIGITS).map(&:flatten) }
+  xs
+end
+
+def get_mem_locs(loc, x_bits)
+  return [loc] if x_bits.size.zero?
+
+  mem_locs = []
+  get_floats(x_bits.size).each do |f|
+    (0...x_bits.size).each { |i| loc[x_bits[i]] = f[i] }
+    mem_locs << loc.join('')
+  end
+
+  mem_locs
+end
 
 mask = '1' * 36
-mem = Hash.new(0)
+mem = {}
 
-$stdin.each_line.map(&:chomp).each do |i|
-  (op, val_s) = i.split(' = ')
+$stdin.each_line.map(&:chomp).each do |line|
+  (op, val_s) = line.split(' = ')
 
   if op == 'mask'
     mask = val_s
     next
   end
 
-  loc = op.gsub(/(^mem\[|\]$)/, '').to_i.to_s(2).rjust(36, '0').split('')
+  loc = op.match(/\d+/)[0].to_i.to_s(2).rjust(36, '0').split('')
   val = val_s.to_i
-
-  x_count = 0
-  float_bits = Hash.new(0)
-  (0...mask.split('').size).each do |b|
-    next if mask[b] == '0'
-
-    if mask[b] == 'X'
-      float_bits[x_count] = b
-      x_count += 1
-    end
-
-    loc[b] = mask[b]
-  end
-
-  mem_locs = []
-  if x_count.zero?
-    mem_locs.append(loc)
-  else
-    floats = BIN_DIGITS
-    (1...x_count).each do |_|
-      floats = floats.product(BIN_DIGITS).map { |a| a.flatten }
-    end
-
-    floats.each do |f|
-      (0...x_count).each do |i|
-        loc[float_bits[i]] = f[i]
-      end
-      mem_locs.append(loc.join(''))
-    end
-  end
-
-  mem_locs.each { |ml| mem[ml.to_i(2)] = val }
+  get_mem_locs(*mask_loc(loc, mask)).each { |ml| mem[ml.to_i(2)] = val }
 end
 
 puts mem.values.sum
