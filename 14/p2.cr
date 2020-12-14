@@ -52,18 +52,16 @@ end
 mask = "1" * ADDR_SPACE_LEN
 mem = {} of Int64 => Int64
 
-STDIN.each_line
-  .map { |line| line.chomp.split(" = ") }
-  .each do |line|
-    op, val_s = line
-    if op == "mask"
-      mask = val_s.each_char.to_a
-      next
-    end
-
-    loc = get_loc(op)
-    val = val_s.to_i64
-    get_mem_locs(*mask_loc(loc, mask)).each { |ml| mem[ml.to_i64(2)] = val }
+STDIN.each_line do |line|
+  op, val_s = line.chomp.split(" = ")
+  if op == "mask"
+    mask = val_s.each_char.to_a
+    next
   end
+
+  loc = get_loc(op)
+  val = val_s.to_i64
+  get_mem_locs(*mask_loc(loc, mask)).each { |ml| mem[ml.to_i64(2)] = val }
+end
 
 puts mem.values.sum
