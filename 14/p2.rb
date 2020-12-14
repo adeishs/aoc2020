@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 BIN_DIGITS = %w[0 1].freeze
+ADDR_SPACE_LEN = 36
 
 def mask_loc(loc, mask)
   x_bits = []
@@ -37,7 +38,7 @@ def get_mem_locs(loc, x_bits)
   mem_locs
 end
 
-mask = '1' * 36
+mask = '1' * ADDR_SPACE_LEN
 mem = {}
 
 $stdin.each_line.map(&:chomp).each do |line|
@@ -48,7 +49,7 @@ $stdin.each_line.map(&:chomp).each do |line|
     next
   end
 
-  loc = op.match(/\d+/)[0].to_i.to_s(2).rjust(36, '0').split('')
+  loc = op.match(/\d+/)[0].to_i.to_s(2).rjust(ADDR_SPACE_LEN, '0').split('')
   val = val_s.to_i
   get_mem_locs(*mask_loc(loc, mask)).each { |ml| mem[ml.to_i(2)] = val }
 end
