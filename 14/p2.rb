@@ -6,7 +6,7 @@ ADDR_SPACE_LEN = 36
 
 def mask_loc(loc, mask)
   x_bits = []
-  (0...mask.split('').size).each do |b|
+  (0...mask.size).each do |b|
     case mask[b]
     when 'X'
       x_bits << b
@@ -19,7 +19,7 @@ def mask_loc(loc, mask)
 end
 
 def get_floats(x_bit_count)
-  return nil if x_bit_count.zero?
+  return [] if x_bit_count.zero?
 
   xs = BIN_DIGITS
   (x_bit_count - 1).times { xs = xs.product(BIN_DIGITS).map(&:flatten) }
@@ -32,7 +32,7 @@ def get_mem_locs(loc, x_bits)
   mem_locs = []
   get_floats(x_bits.size).each do |f|
     (0...x_bits.size).each { |i| loc[x_bits[i]] = f[i] }
-    mem_locs << loc.join('')
+    mem_locs << loc.join
   end
 
   mem_locs
@@ -41,11 +41,11 @@ end
 mask = '1' * ADDR_SPACE_LEN
 mem = {}
 
-$stdin.each_line.map(&:chomp).each do |line|
-  (op, val_s) = line.split(' = ')
-
+$stdin.each_line
+      .map { |line| line.chomp.split(' = ') }
+      .each do |op, val_s|
   if op == 'mask'
-    mask = val_s
+    mask = val_s.split('')
     next
   end
 
