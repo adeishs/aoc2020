@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 nums = $stdin.read.chomp.split(',').map(&:to_i)
 
@@ -7,12 +8,11 @@ last_spoken = {}
 
 (nums.size...2020).each do |turn|
   last_num = nums[turn - 1]
-  new_num = nil
-  if last_spoken[last_num].nil? || last_spoken[last_num].size == 1
-    new_num = 0
-  else
-    new_num = last_spoken[last_num][0] - last_spoken[last_num][1]
-  end
+  new_num = if last_spoken[last_num].nil? || last_spoken[last_num].size == 1
+              0
+            else
+              last_spoken[last_num][0] - last_spoken[last_num][1]
+            end
 
   last_spoken[new_num] = [] if last_spoken[new_num].nil?
   last_spoken[new_num].unshift(turn)
