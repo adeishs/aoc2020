@@ -21,9 +21,5 @@ nearby_str = sections.pop.sub("nearby tickets:\n", '')
 
 valid_ticket = get_valid_tickets(sections.shift)
 puts get_nearby_recs(nearby_str).select do |tix|
-  tix.any? do |t|
-    !valid_ticket[t]
-  end
-end.map do |tix|
-  tix.reject { |t| valid_ticket[t] }.sum
-end.sum
+  tix.any? { |t| !valid_ticket[t] }
+end.map { |tix| tix.reject { |t| valid_ticket[t] }.sum }.sum
