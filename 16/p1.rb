@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 def get_valid_tickets(field_str)
   valid_ticket = Hash.new(false)
@@ -19,10 +20,10 @@ sections = $stdin.read.split("\n\n")
 nearby_str = sections.pop.sub("nearby tickets:\n", '')
 
 valid_ticket = get_valid_tickets(sections.shift)
-puts get_nearby_recs(nearby_str).select { |tix|
-  tix.any? {
-    |t| !valid_ticket[t]
-  }
-}.map {
-  |tix| tix.select { |t| !valid_ticket[t] }.sum
-}.sum
+puts get_nearby_recs(nearby_str).select do |tix|
+  tix.any? do |t|
+    !valid_ticket[t]
+  end
+end.map do |tix|
+  tix.reject { |t| valid_ticket[t] }.sum
+end.sum
