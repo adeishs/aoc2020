@@ -41,7 +41,9 @@ def get_field_order(field_tickets_in, nearby_recs_in)
   (0...nearby_recs.size).each do |i|
     possible_fields[i] = {}
     field_tickets.each_key do |field|
-      possible_fields[i][field] = true if (nearby_recs[i] - field_tickets[field]).empty?
+      if (nearby_recs[i] - field_tickets[field]).empty?
+        possible_fields[i][field] = true
+      end
     end
   end
 
