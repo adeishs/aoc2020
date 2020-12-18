@@ -35,7 +35,7 @@ end
       .size
 
     if (c == ACTIVE && active_cube_count.between?(2, 3)) ||
-       (curr.fetch([x, y, z], INACTIVE) == INACTIVE && active_cube_count == 3)
+       (c == INACTIVE && active_cube_count == 3)
       nxt[[x, y, z]] = ACTIVE
     end
   end
