@@ -30,18 +30,7 @@ def eval_expr(expr)
 
   tokens = expr.split
   acc = tokens.shift.to_i
-
-  until tokens.size.zero?
-    op = tokens.shift
-    y = tokens.shift.to_i
-
-    if op == '+'
-      acc += y
-    else
-      acc *= y
-    end
-  end
-
+  acc = acc.public_send tokens.shift, tokens.shift.to_i until tokens.size.zero?
   acc
 end
 
