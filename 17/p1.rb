@@ -3,7 +3,6 @@
 
 INACTIVE = '.'
 ACTIVE = '#'
-DIRS = [-1, 0, 1].freeze
 
 curr = {}
 
