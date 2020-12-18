@@ -1,6 +1,22 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+def eval_ltr(tokens, op)
+  acc = 0
+  loop do
+    pos = tokens.find_index(op)
+    break if pos.nil?
+
+    x = tokens[pos - 1].to_i
+    y = tokens[pos + 1].to_i
+
+    acc = x.public_send op, y
+    tokens[pos - 1..pos + 1] = [acc.to_s]
+  end
+
+  tokens
+end
+
 def eval_expr(expr)
   loop do
     start = expr.index('(')
@@ -28,25 +44,7 @@ def eval_expr(expr)
            expr[finish + 1...expr.size]
   end
 
-  tokens = expr.split
-  acc = 0
-  loop do
-    pos = tokens.find_index('+')
-    break if pos.nil?
-
-    acc = tokens[pos - 1].to_i + tokens[pos + 1].to_i
-    tokens[pos - 1..pos + 1] = [acc.to_s]
-  end
-  acc = tokens[0].to_i
-
-  loop do
-    pos = tokens.find_index('*')
-    break if pos.nil?
-
-    acc = tokens[pos - 1].to_i * tokens[pos + 1].to_i
-    tokens[pos - 1..pos + 1] = [acc.to_s]
-  end
-  tokens[0].to_i
+  eval_ltr(eval_ltr(expr.split, '+'), '*').first.to_i
 end
 
 puts $stdin.each_line.map { |line| eval_expr(line.chomp) }.sum
