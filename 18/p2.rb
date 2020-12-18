@@ -33,6 +33,7 @@ def eval_expr(expr)
   loop do
     pos = tokens.find_index('+')
     break if pos.nil?
+
     acc = tokens[pos - 1].to_i + tokens[pos + 1].to_i
     tokens[pos - 1..pos + 1] = [acc.to_s]
   end
@@ -41,6 +42,7 @@ def eval_expr(expr)
   loop do
     pos = tokens.find_index('*')
     break if pos.nil?
+
     acc = tokens[pos - 1].to_i * tokens[pos + 1].to_i
     tokens[pos - 1..pos + 1] = [acc.to_s]
   end
