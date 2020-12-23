@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 def parse_player_inp(inp)
   lines = inp.split("\n")
@@ -10,23 +11,24 @@ PLAYERS = [0, 1].freeze
 
 def subgame(decks)
   seen_deck = {}
-  while PLAYERS.all? { |p| !decks[p].empty? }
+  loop do
     curr = decks.map { |d| d }
-    return [0, decks[0]] if seen_deck.has_key?(curr)
+    return [0, decks[0]] if seen_deck.key?(curr)
+
     seen_deck[curr] = true
 
     cards = []
     PLAYERS.each { |p| cards << decks[p].shift }
 
-    if PLAYERS.all? { |p| decks[p].size >= cards[p] }
-      winner = subgame(PLAYERS.map { |p| decks[p][0...cards[p]] }).shift
-    else
-      winner = cards[0] > cards[1] ? 0 : 1
-    end
+    winner = if PLAYERS.all? { |p| decks[p].size >= cards[p] }
+               subgame(PLAYERS.map { |p| decks[p][0...cards[p]] }).shift
+             else
+               cards[0] > cards[1] ? 0 : 1
+             end
     loser = 1 - winner
 
     [winner, loser].each { |v| decks[winner] << cards[v] }
-    
+
     return [winner, decks[winner]] if decks[loser].empty?
   end
 end
@@ -38,4 +40,4 @@ num_of_cards = decks.flatten.size
 decks = subgame(decks).pop
 
 puts decks.map.with_index { |v, k| v * (num_of_cards - k) }
-  .reduce { |m, o| m + o }
+          .reduce(&:+)

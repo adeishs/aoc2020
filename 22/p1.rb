@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 def parse_player_inp(inp)
   lines = inp.split("\n")
@@ -18,5 +19,5 @@ loop do
 end
 
 puts deck.flatten
-  .map.with_index { |v, k| v * (num_of_cards - k) }
-  .reduce { |m, o| m + o }
+         .map.with_index { |v, k| v * (num_of_cards - k) }
+         .reduce { |m, o| m + o }
